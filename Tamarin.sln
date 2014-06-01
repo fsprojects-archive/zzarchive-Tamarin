@@ -1,9 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tamarin", "src\Tamarin.fsproj", "{A0342A51-AAB1-4211-92E8-CB6BFE64B9BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0342A51-AAB1-4211-92E8-CB6BFE64B9BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0342A51-AAB1-4211-92E8-CB6BFE64B9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0342A51-AAB1-4211-92E8-CB6BFE64B9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0342A51-AAB1-4211-92E8-CB6BFE64B9BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,6 @@
 ﻿namespace Tamarin
 
 open System
-open System.ComponentModel
 
 type IView<'TEvent, 'TModel> =
     abstract Events : IObservable<'TEvent>
@@ -16,11 +15,14 @@ type IController<'TEvent, 'TModel> =
     abstract Dispatcher : ('TEvent -> EventHandler<'TModel>)
 
 module Mvc = 
+    open System.ComponentModel
+
     let start (model: #INotifyPropertyChanged, view: IView<'TEvent, 'TModel>, controller: IController<_, _>) = 
         controller.InitModel model
         view.SetBindings model
-        view.Events.Subscribe(fun event -> 
+        view.Events.Subscribe (fun event -> 
             match controller.Dispatcher event with
             | Sync eventHandler -> eventHandler model 
             | Async eventHandler -> eventHandler model |> Async.StartImmediate
         )
+    

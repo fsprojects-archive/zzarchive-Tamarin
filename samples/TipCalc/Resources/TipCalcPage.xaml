@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TipCalc;assembly=TipCalc"
+             x:Class="TipCalc.TipCalcPage"
+             Padding="5, 20, 5, 0">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <!-- Row 0 -->
+    <Label Text="Food &amp; Drink:"
+           Grid.Row="0" Grid.Column="0"
+           Font="Large"
+           XAlign="End" YAlign="Center" />
+
+    <Entry Grid.Row="0" Grid.Column="1" x:Name="SubTotal" x:FieldModifier="public" 
+           Keyboard="Numeric"
+           Placeholder="Subtotal" />
+
+    <!-- Row 1 -->
+    <Label Text="Total after Tax:"
+           Grid.Row="1" Grid.Column="0"
+           Font="Large"
+           XAlign="End" YAlign="Center" />
+
+    <Entry Grid.Row="1" Grid.Column="1" x:Name="PostTaxTotal" x:FieldModifier="public"
+           Keyboard="Numeric"
+           Placeholder="Receipt total" />
+
+    <!-- Row 2 -->
+    <Label Text="Tip Percent:" 
+           Grid.Row="2" Grid.Column="0"
+           Font="Large"
+           XAlign="End" YAlign="Center" />
+
+    <Entry Grid.Row="2" Grid.Column="1" x:Name="TipPercent" x:FieldModifier="public"
+           Keyboard="Numeric" />
+    
+    <!-- Row 3 -->
+    <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  x:Name="TipPercentSlider"
+            Minimum="0" Maximum="100"/>
+
+    <!-- Row 4 -->
+    <Label Text="Tip Amount:" 
+           Grid.Row="4" Grid.Column="0"
+           Font="Large"
+           XAlign="End" YAlign="Center" />
+
+    <ContentView BackgroundColor="#40808080"
+                 Grid.Row="4" Grid.Column="1"
+                 Padding="10, 10, 40, 10">
+      <Label x:Name="TipAmount"
+             Font="Large"
+             XAlign="End" />
+    </ContentView>
+    
+    <!-- Row 5 -->
+    <Label Text="Total:"
+           Grid.Row="5" Grid.Column="0"
+           Font="Large"
+           XAlign="End" YAlign="Center" />
+
+    <ContentView BackgroundColor="#40808080"
+                 Grid.Row="5" Grid.Column="1"
+                 Padding="10, 10, 40, 10">
+        <Label x:Name="Total"
+               Font="Large"
+               XAlign="End" />
+    </ContentView>
+  </Grid>
+</ContentPage>

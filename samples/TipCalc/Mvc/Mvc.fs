@@ -43,13 +43,3 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
             | Async eventHandler -> Async.StartImmediate( eventHandler model)
         )
 
-type Model() = 
-    let propertyChanged = Event<_, _>()
-
-    interface INotifyPropertyChanged with
-        [<CLIEvent>]
-        member this.PropertyChanged = propertyChanged.Publish 
-
-    member this.NotifyPropertyChanged propertyName = 
-        propertyChanged.Trigger(this, PropertyChangedEventArgs propertyName)
-

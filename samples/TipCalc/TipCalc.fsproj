@@ -135,16 +135,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XamlPage.fs" />
-    <Compile Include="Mvc.fs" />
-    <Compile Include="AppDelegate.fs" />
+    <Compile Include="Mvc\Mvc.fs" />
+    <Compile Include="Mvc\Model.fs" />
+    <Compile Include="Mvc\View.fs" />
+    <Compile Include="Mvc\XamlPage.fs" />
     <Compile Include="TipCalcMvc.fs" />
+    <Compile Include="AppDelegate.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.1.2.1.6229\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10\Xamarin.Forms.targets" />
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Mvc\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\TipCalcPage.xaml" />

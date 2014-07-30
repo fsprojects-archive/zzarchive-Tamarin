@@ -12,53 +12,46 @@ type TipCalcModel() =
     let mutable tipAmount = Nullable<decimal>()
     let mutable total = Nullable<decimal>()
 
-    member this.SubTotal with get() = subTotal and set value = subTotal <- value; this.NotifyPropertyChanged "subTotal"
-    member this.PostTaxTotal with get() = postTaxTotal and set value = postTaxTotal <- value; this.NotifyPropertyChanged "PostTaxTotal"
-    member this.TipPercent with get() = tipPercent and set value = tipPercent <- value; this.NotifyPropertyChanged "TipPercent"
-    member this.TipAmount with get() = tipAmount and set value = tipAmount <- value; this.NotifyPropertyChanged "TipAmount"
-    member this.Total with get() = total and set value = total <- value; this.NotifyPropertyChanged "Total"
+    member this.SubTotal with get() = subTotal and set value = subTotal <- value; this.NotifyPropertyChanged <@ this.SubTotal @>
+    member this.PostTaxTotal with get() = postTaxTotal and set value = postTaxTotal <- value; this.NotifyPropertyChanged <@ this.PostTaxTotal @>
+    member this.TipPercent with get() = tipPercent and set value = tipPercent <- value; this.NotifyPropertyChanged <@ this.TipPercent @>
+    member this.TipAmount with get() = tipAmount and set value = tipAmount <- value; this.NotifyPropertyChanged <@ this.TipAmount @>
+    member this.Total with get() = total and set value = total <- value; this.NotifyPropertyChanged <@ this.Total @>
 
 type TipCalcEvents = Calculate
 
-type TipCalcView() = 
-
-    let page = XamlPage("TipCalcPage.xaml")
-    let subTotal: Entry = page ? SubTotal
-    let postTaxTotal: Entry = page ? PostTaxTotal
-    let tipPercent: Entry = page ? TipPercent
-    let tipPercentSlider: Slider = page ? TipPercentSlider
-    let tipAmount: Label = page ? TipAmount
-    let total: Label = page ? Total
+type TipCalcView() as this = 
+    inherit View<TipCalcEvents, TipCalcModel, XamlPage>(root = XamlPage("TipCalcPage.xaml"))    
+    
+    let subTotal: Entry = this.Root ? SubTotal
+    let postTaxTotal: Entry = this.Root ? PostTaxTotal
+    let tipPercent: Entry = this.Root ? TipPercent
+    let tipPercentSlider: Slider = this.Root ? TipPercentSlider
+    let tipAmount: Label = this.Root ? TipAmount
+    let total: Label = this.Root ? Total
         
-    member this.Root = page
+    override this.EventStreams = 
+        [
+            subTotal.TextChanged |> Observable.mapTo Calculate
+            postTaxTotal.TextChanged |> Observable.mapTo Calculate
+            tipPercent.TextChanged |> Observable.mapTo Calculate
+        ] 
 
-    interface IView<TipCalcEvents, TipCalcModel> with
 
-        member this.Events = 
-            [
-                subTotal.TextChanged :?> IObservable<_>
-                upcast postTaxTotal.TextChanged 
-                upcast tipPercent.TextChanged
-            ] 
-            |> List.reduce Observable.merge
-            |> Observable.map (fun _ -> Calculate)
+    override this.SetBindings model = 
+        
+        subTotal.SetBinding(Entry.TextProperty, "SubTotal")
+        postTaxTotal.SetBinding(Entry.TextProperty, "PostTaxTotal")
+        tipPercent.SetBinding(Entry.TextProperty, "TipPercent")
+        tipPercentSlider.SetBinding(
+            Slider.ValueProperty, 
+            "TipPercent", 
+            BindingMode.TwoWay, 
+            converter = IValueConverter.Create(Decimal.Parse >> Decimal.ToDouble, fun x -> Decimal(x) |> Decimal.Round |> string)
+        )
+        tipAmount.SetBinding(Label.TextProperty, "TipAmount", stringFormat = "{0:C}")
+        total.SetBinding(Label.TextProperty, "Total", stringFormat = "{0:C}")
 
-        member this.SetBindings model = 
-            
-            subTotal.SetBinding(Entry.TextProperty, "SubTotal")
-            postTaxTotal.SetBinding(Entry.TextProperty, "PostTaxTotal")
-            tipPercent.SetBinding(Entry.TextProperty, "TipPercent")
-            tipPercentSlider.SetBinding(
-                Slider.ValueProperty, 
-                "TipPercent", 
-                BindingMode.TwoWay, 
-                converter = IValueConverter.Create(Decimal.Parse >> Decimal.ToDouble, fun x -> Decimal(x) |> Decimal.Round |> string)
-            )
-            tipAmount.SetBinding(Label.TextProperty, "TipAmount", stringFormat = "{0:C}")
-            total.SetBinding(Label.TextProperty, "Total", stringFormat = "{0:C}")
-
-            page.BindingContext <- model
-            
 type TipCalcController() = 
     inherit Controller<TipCalcEvents, TipCalcModel>()
 

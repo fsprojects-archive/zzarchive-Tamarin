@@ -138,6 +138,7 @@
     <Compile Include="Mvc\Mvc.fs" />
     <Compile Include="Mvc\Model.fs" />
     <Compile Include="Mvc\View.fs" />
+    <Compile Include="Mvc\Binding.fs" />
     <Compile Include="Mvc\XamlPage.fs" />
     <Compile Include="TipCalcMvc.fs" />
     <Compile Include="AppDelegate.fs" />

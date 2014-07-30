@@ -37,20 +37,24 @@ type TipCalcView() as this =
             tipPercent.TextChanged |> Observable.mapTo Calculate
         ] 
 
-
     override this.SetBindings model = 
         
-        subTotal.SetBinding(Entry.TextProperty, "SubTotal")
-        postTaxTotal.SetBinding(Entry.TextProperty, "PostTaxTotal")
-        tipPercent.SetBinding(Entry.TextProperty, "TipPercent")
+        Binding.ofExpression 
+            <@ 
+                subTotal.Text <- model.SubTotal 
+                postTaxTotal.Text <- model.PostTaxTotal
+                tipPercent.Text <- model.TipPercent
+
+                tipAmount.Text <- String.Format("{0:C}", model.TipAmount)
+                total.Text <- String.Format("{0:C}", model.Total)
+            @>
+        
         tipPercentSlider.SetBinding(
             Slider.ValueProperty, 
             "TipPercent", 
             BindingMode.TwoWay, 
             converter = IValueConverter.Create(Decimal.Parse >> Decimal.ToDouble, fun x -> Decimal(x) |> Decimal.Round |> string)
         )
-        tipAmount.SetBinding(Label.TextProperty, "TipAmount", stringFormat = "{0:C}")
-        total.SetBinding(Label.TextProperty, "Total", stringFormat = "{0:C}")
 
 type TipCalcController() = 
     inherit Controller<TipCalcEvents, TipCalcModel>()

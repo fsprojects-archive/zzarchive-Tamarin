@@ -39,7 +39,7 @@ type TipCalcView() as this =
 
     override this.SetBindings model = 
         
-        Binding.ofExpression 
+        Binding.OfExpression 
             <@ 
                 subTotal.Text <- model.SubTotal 
                 postTaxTotal.Text <- model.PostTaxTotal
@@ -48,13 +48,14 @@ type TipCalcView() as this =
                 tipAmount.Text <- String.Format("{0:C}", model.TipAmount)
                 total.Text <- String.Format("{0:C}", model.Total)
             @>
-        
-        tipPercentSlider.SetBinding(
-            Slider.ValueProperty, 
-            "TipPercent", 
-            BindingMode.TwoWay, 
-            converter = IValueConverter.Create(Decimal.Parse >> Decimal.ToDouble, fun x -> Decimal(x) |> Decimal.Round |> string)
-        )
+
+        let converter = IValueConverter.Create(Decimal.Parse >> Decimal.ToDouble, fun x -> Decimal(x) |> Decimal.Round |> string)       
+
+        Binding.OfExpression(
+            <@ 
+                tipPercentSlider.Value <- converter.Apply model.TipPercent
+            @>,
+            BindingMode.TwoWay)
 
 type TipCalcController() = 
     inherit Controller<TipCalcEvents, TipCalcModel>()

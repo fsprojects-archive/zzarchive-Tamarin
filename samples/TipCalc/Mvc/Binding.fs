@@ -10,7 +10,7 @@ open Microsoft.FSharp.Quotations.Patterns
 open Microsoft.FSharp.Quotations.DerivedPatterns
 open Microsoft.FSharp.Quotations.ExprShape
 
-let inline undefined<'T> = raise<'T> <| NotImplementedException()
+let inline private undefined<'T> = raise<'T> <| NotImplementedException()
 
 type IValueConverter with 
     static member Create(convert : 'a -> 'b, convertBack : 'b -> 'a) =  {
@@ -106,9 +106,7 @@ module internal Patterns =
                 |> Microsoft.FSharp.Linq.RuntimeHelpers.LeafExpressionConverter.EvaluateQuotation 
                 |> unbox
 
-            let binding = Binding(prop.Name, Mode = BindingMode.OneWay)
-            binding.Converter <- IValueConverter.OneWay converter
-            Some binding
+            Some( Binding(prop.Name, BindingMode.OneWay, converter = IValueConverter.OneWay converter))
         | _ -> None
 
     let rec (|Source|) = function
@@ -119,7 +117,7 @@ module internal Patterns =
         | StringFormat(format, Source binding) -> 
             binding.StringFormat <- format
             binding
-        | Call(None, method', [ Value(:? IValueConverter as converter, _); Source binding ] ) when method'.Name = "IValueConverter.Apply" -> 
+        | Call(None, ``method``, [ Value(:? IValueConverter as converter, _); Source binding ] ) when ``method``.Name = "IValueConverter.Apply" -> 
             binding.Converter <- converter
             binding
         | Converter(convert, Source binding) -> 
@@ -128,18 +126,10 @@ module internal Patterns =
             binding
         | SinglePropertyExpression binding -> 
             binding
-
-        | expr -> invalidArg "binding property path quotation" (string expr)
+        | expr -> 
+            invalidArg "binding property path quotation" (string expr)
 
 open Patterns
-
-type Expr with
-    member internal this.ToBinding(?mode) = 
-        match this with
-        | PropertySet(Target target, targetProperty, [], Source binding) ->
-            mode |> Option.iter binding.set_Mode 
-            target.SetBinding(targetProperty.BindableProperty, binding)
-        | _ -> invalidArg "expr" (string this) 
 
 type Binding with
     static member OfExpression(expr, ?mode) =
@@ -148,6 +138,10 @@ type Binding with
             | tail -> [ tail ]
 
         for e in split expr do
-            e.ToBinding(?mode = mode)
+            match e with
+            | PropertySet(Target target, targetProperty, [], Source binding) ->
+                mode |> Option.iter binding.set_Mode 
+                target.SetBinding(targetProperty.BindableProperty, binding)
+            | _ -> invalidArg "expr" (string e) 
 
         

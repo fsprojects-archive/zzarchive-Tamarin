@@ -22,8 +22,10 @@ type TipCalcModel() =
 
 type TipCalcEvents = Calculate
 
+type TipCalcPage = Xam
+
 type TipCalcView() as this = 
-    inherit View<TipCalcEvents, TipCalcModel, XamlPage>(root = XamlPage("TipCalcPage.xaml"))    
+    inherit Tamarin.View<TipCalcEvents, TipCalcModel, XamlPage>(root = XamlPage("TipCalcPage.xaml"))    
     
     let subTotal: Entry = this.Root ? SubTotal
     let postTaxTotal: Entry = this.Root ? PostTaxTotal

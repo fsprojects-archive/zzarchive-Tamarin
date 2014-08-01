@@ -1,6 +1,6 @@
 ﻿[<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Binding
+module Tamarin.Binding
 
 open System
 open System.Reflection
@@ -15,12 +15,16 @@ let inline private undefined<'T> = raise<'T> <| NotImplementedException()
 type IValueConverter with 
     static member Create(convert : 'a -> 'b, convertBack : 'b -> 'a) =  {
         new IValueConverter with
-            member this.Convert(value, _, _, _) = value |> unbox |> convert |> box 
-            member this.ConvertBack(value, _, _, _) = value |> unbox |> convertBack |> box 
+            member this.Convert(value, targetType, _, _) = 
+                assert (typeof<'a> = targetType)
+                value |> unbox |> convert |> box 
+            member this.ConvertBack(value, targetType, _, _) = 
+                assert (typeof<'b> = targetType)
+                value |> unbox |> convertBack |> box 
     }
     static member OneWay convert = IValueConverter.Create(convert, fun _ -> undefined)
 
-    member this.Apply _ = undefined
+    member this.Apply<'Source, 'Target>(sourceProperty: 'Source): 'Target = undefined
 
 module internal Patterns = 
 
@@ -84,8 +88,8 @@ module internal Patterns =
             match propertyBody with 
             | PropertyGet _ as getter -> yield getter
             | ShapeVar _ -> ()
-            | ShapeLambda(_, body) -> yield! extractPropertyGetters body   
-            | ShapeCombination(_, exprs) -> for subExpr in exprs do yield! extractPropertyGetters subExpr
+            | ShapeLambda( _, body) -> yield! extractPropertyGetters body   
+            | ShapeCombination( _, exprs) -> for subExpr in exprs do yield! extractPropertyGetters subExpr
         }
 
     let (|SinglePropertyExpression|_|) expr = 
@@ -95,13 +99,13 @@ module internal Patterns =
             let rec replacePropertyWithParam expr = 
                 match expr with 
                 | PropertyGet _ as getter when getter = getterToReplace -> 
-                    Expr.Call(getUnboxImpl prop.PropertyType, [Expr.Var propertyValue])
-                | ShapeVar var -> Expr.Var(var)
-                | ShapeLambda(var, body) -> Expr.Lambda(var, replacePropertyWithParam body)  
-                | ShapeCombination(shape, exprs) -> ExprShape.RebuildShapeCombination(shape, exprs |> List.map(fun e -> replacePropertyWithParam e))
+                    Expr.Call( getUnboxImpl prop.PropertyType, [ Expr.Var propertyValue ])
+                | ShapeVar var -> Expr.Var( var)
+                | ShapeLambda( var, body) -> Expr.Lambda(var, replacePropertyWithParam body)  
+                | ShapeCombination( shape, exprs) -> ExprShape.RebuildShapeCombination( shape, exprs |> List.map( fun e -> replacePropertyWithParam e))
 
             let converterBody = Expr.Call(getBoxImpl expr.Type, [ replacePropertyWithParam expr ])
-            let converter : obj -> obj = 
+            let converter: obj -> obj = 
                 Expr.Lambda(propertyValue, converterBody)
                 |> Microsoft.FSharp.Linq.RuntimeHelpers.LeafExpressionConverter.EvaluateQuotation 
                 |> unbox

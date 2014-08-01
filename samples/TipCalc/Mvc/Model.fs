@@ -1,4 +1,4 @@
-﻿namespace global
+﻿namespace Tamarin
 
 open System
 open System.ComponentModel

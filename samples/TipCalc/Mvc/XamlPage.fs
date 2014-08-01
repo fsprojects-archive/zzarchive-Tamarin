@@ -1,4 +1,4 @@
-﻿namespace global
+﻿namespace Tamarin
 
 open System.Reflection
 open System.IO
@@ -23,24 +23,3 @@ type XamlPage(bundledResourse: string) as this =
         | null -> invalidArg "Name" ("Cannot find element with name: " + name)
         | control -> unbox control 
 
-[<AutoOpen>]
-module Extensions = 
-
-    type IValueConverter with 
-        static member Create(convert : 'a -> 'b, convertBack : 'b -> 'a) =  {
-            new IValueConverter with
-                member this.Convert(value, _, _, _) = 
-                    try 
-                        value |> unbox |> convert |> box 
-                    with why -> 
-                        null
-                member this.ConvertBack(value, _, _, _) = 
-                    try 
-                        let typedValue = unbox value
-                        let result = convertBack typedValue
-                        box result
-                        //value |> unbox |> convertBack |> box 
-                    with why -> 
-                        null
-        }
-        static member OneWay convert = IValueConverter.Create(convert, fun _ -> raise <| NotImplementedException())

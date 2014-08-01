@@ -1,4 +1,4 @@
-﻿namespace global
+﻿namespace Tamarin
 
 open System.Reflection
 open System.IO

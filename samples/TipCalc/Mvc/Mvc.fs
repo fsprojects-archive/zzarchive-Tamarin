@@ -1,4 +1,4 @@
-﻿namespace global
+﻿namespace Tamarin
 
 open System
 open System.ComponentModel
@@ -27,19 +27,3 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
             | Sync eventHandler -> eventHandler model
             | Async eventHandler -> Async.StartImmediate( eventHandler model)
         )
-
-[<AbstractClass>]
-type Controller<'Event, 'Model>() =
-    interface IController<'Event, 'Model> with
-        member this.InitModel model = this.InitModel model
-        member this.Dispatcher = this.Dispatcher
-
-    abstract InitModel : 'Model -> unit
-    abstract Dispatcher : ('Event -> EventHandler<'Model>)
-
-    static member Create callback = {
-        new IController<'Event, 'Model> with
-            member __.InitModel _ = () 
-            member __.Dispatcher = Sync << callback
-    }
-

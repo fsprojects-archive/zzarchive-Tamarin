@@ -3,6 +3,8 @@
 open System
 open Xamarin.Forms
 
+open Tamarin
+
 type TipCalcModel() =
     inherit Model()
 

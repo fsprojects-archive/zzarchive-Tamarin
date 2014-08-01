@@ -4,15 +4,17 @@ open System
 open MonoTouch.UIKit
 open MonoTouch.Foundation
 open Xamarin.Forms
-open Xamarin.Forms.Xaml
+
+open Tamarin
 
 [<Register ("AppDelegate")>]
 type AppDelegate () =
     inherit UIApplicationDelegate ()
 
     let mutable window: UIWindow = null
+    let mutable eventLoop: IDisposable = null
 
-    override x.FinishedLaunching (app, options) =
+    override this.FinishedLaunching (app, options) =
         Forms.Init ()
         window <- new UIWindow (UIScreen.MainScreen.Bounds)
 
@@ -20,11 +22,14 @@ type AppDelegate () =
         let view = TipCalcView()
         let controller = TipCalcController()
         let mvc = Mvc(model, view, controller)
-        let eventLoop = mvc.Start()
+        eventLoop <- mvc.Start()
 
         window.RootViewController <- view.Root.CreateViewController ()
         window.MakeKeyAndVisible ()
         true
+
+    override this.WillTerminate _ =
+        eventLoop.Dispose()
 
 module Main =
     [<EntryPoint>]

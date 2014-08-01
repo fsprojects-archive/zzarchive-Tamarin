@@ -41,12 +41,12 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
 
     member this.Compose(childController : IController<'EX, 'MX>, childView : IView<'EX, 'MX>, childModelSelector : _ -> 'MX) = 
         let compositeView = {
-                new IView<_, _> with
-                    member __.Events = 
-                        Observable.merge (Observable.map Choice1Of2  view.Events) (Observable.map Choice2Of2 childView.Events)
-                    member __.SetBindings model =
-                        view.SetBindings model  
-                        model |> childModelSelector |> childView.SetBindings
+            new IView<_, _> with
+                member __.Events = 
+                    Observable.merge (Observable.map Choice1Of2  view.Events) (Observable.map Choice2Of2 childView.Events)
+                member __.SetBindings model =
+                    view.SetBindings model  
+                    model |> childModelSelector |> childView.SetBindings
         }
 
         let compositeController = { 
@@ -63,3 +63,15 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
         }
 
         Mvc(model, compositeView, compositeController)
+
+    static member (<+>) (mvc : Mvc<_, _>,  (childController, childView, childModelSelector)) = 
+        mvc.Compose(childController, childView, childModelSelector)
+
+    member this.Compose(childController : IController<_, _>, events : IObservable<_>) = 
+        let childView = {
+            new IView<_, _> with
+                member __.Events = events
+                member __.SetBindings _ = () 
+        }
+        this.Compose(childController, childView, id)
+

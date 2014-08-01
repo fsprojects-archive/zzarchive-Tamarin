@@ -135,12 +135,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mvc\Mvc.fs" />
-    <Compile Include="Mvc\Model.fs" />
-    <Compile Include="Mvc\View.fs" />
-    <Compile Include="Mvc\Controller.fs" />
-    <Compile Include="Mvc\Binding.fs" />
-    <Compile Include="Mvc\XamlPage.fs" />
     <Compile Include="TipCalcMvc.fs" />
     <Compile Include="AppDelegate.fs" />
   </ItemGroup>
@@ -149,9 +143,14 @@
   <Import Project="..\..\packages\Xamarin.Forms.1.2.1.6229\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10\Xamarin.Forms.targets" />
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Mvc\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\TipCalcPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tamarin.fsproj">
+      <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
+      <Name>Tamarin</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

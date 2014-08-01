@@ -3,6 +3,9 @@
 open System
 open System.ComponentModel
 open System.Runtime.ExceptionServices
+open System.Reactive.Linq
+open System.Reactive.Concurrency
+open System.Threading
 
 type IView<'Event, 'Model> = 
     abstract Events : IObservable<'Event> with get
@@ -22,20 +25,26 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
     let mutable error = fun(exn, _) -> ExceptionDispatchInfo.Capture(exn).Throw()
     
     member this.Start() =
+
         controller.InitModel model
         view.SetBindings model
 
-        view.Events.Subscribe( fun event -> 
-            match controller.Dispatcher event with
-            | Sync eventHandler ->
-                try eventHandler model 
-                with why -> error(why, event)
-            | Async eventHandler -> 
-                Async.StartWithContinuations(
-                    computation = eventHandler model, 
-                    continuation = ignore, 
-                    exceptionContinuation = (fun why -> error(why, event)),
-                    cancellationContinuation = ignore))        
+        let scheduler = SynchronizationContextScheduler(SynchronizationContext.Current, alwaysPost = false)
+
+        view
+            .Events
+            .ObserveOn( scheduler)
+            .Subscribe( fun event -> 
+                match controller.Dispatcher event with
+                | Sync eventHandler ->
+                    try eventHandler model 
+                    with why -> error(why, event)
+                | Async eventHandler -> 
+                    Async.StartWithContinuations(
+                        computation = eventHandler model, 
+                        continuation = ignore, 
+                        exceptionContinuation = (fun why -> error(why, event)),
+                        cancellationContinuation = ignore))        
 
     member this.Error with get() = error and set value = error <- value
 

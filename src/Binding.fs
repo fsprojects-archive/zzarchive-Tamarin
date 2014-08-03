@@ -24,7 +24,7 @@ type IValueConverter with
     }
     static member OneWay convert = IValueConverter.Create(convert, fun _ -> undefined)
 
-    member this.Apply<'Source, 'Target>(sourceProperty: 'Source): 'Target = undefined
+    member this.Apply<'Source, 'Target>(sourceProperty : 'Source) : 'Target = undefined
 
 module internal Patterns = 
 
@@ -56,7 +56,7 @@ module internal Patterns =
         loop expr [] |> Option.map (String.concat "." )
 
     let (|StringFormat|_|) = function
-        | SpecificCall <@ String.Format : string * obj -> string @> (None, [], [ Value(:? string as format, _); Coerce( propertyPath, _) ]) ->
+        | SpecificCall <@ String.Format : string * obj -> string @> (None, [], [ Value( :? string as format, _); Coerce( propertyPath, _) ]) ->
             Some(format, propertyPath)
         | _ -> None    
 

@@ -23,13 +23,6 @@ type TodoItemCell() as this =
     do
         layout.Children.AddRange( label, tick) 
         this.View <- layout
-       
-    override this.OnBindingContextChanged () = 
-        // Fixme : this is happening because the View.Parent is getting 
-        // set after the Cell gets the binding context set on it. Then it is inheriting
-        // the parents binding context.
-        this.View.BindingContext <- this.BindingContext
-        base.OnBindingContextChanged ()
 
 type TodoListPage() as this = 
     inherit ContentPage()
@@ -119,11 +112,10 @@ type TodoListModel() =
     inherit View<TodoListEvents, TodoListModel, TodoListPage>(root = TodoListPage())
 
     override this.SetBindings model = 
-        Binding.OfExpression 
-            <@
-                this.Root.TasksListView.ItemsSource <- model.Items
-                this.Root.TasksListView.SelectedItem <- model.SelectedTask
-            @>
+        this.Root.TasksListView.SetBindings(
+            itemsSource = <@ model.Items @>, 
+            selectedItem = <@ model.SelectedTask @>
+        )
 
     override this.EventStreams = 
         [

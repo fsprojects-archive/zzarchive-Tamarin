@@ -148,4 +148,9 @@ type Binding with
                 target.SetBinding(targetProperty.BindableProperty, binding)
             | _ -> invalidArg "expr" (string e) 
 
+type ListView with
+    member this.SetBindings(itemsSource : Expr<#seq<'Item>>, selectedItem : Expr<'Item>) = 
         
+        this.SetBinding(ListView.ItemsSourceProperty, (|Source|) itemsSource)
+        this.SetBinding(ListView.SelectedItemProperty, (|Source|) selectedItem)
+ 

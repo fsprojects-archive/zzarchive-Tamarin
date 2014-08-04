@@ -12,15 +12,10 @@ module Observable =
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Extensions = 
-    type Layout<'T when 'T :> View> with
-
-        member this.AddChildren([<ParamArray>] children) = 
-            children |> Array.iter this.Children.Add
-
-        member this.Children 
-            with set value =
-                this.Children.Clear()
-                value |> Array.iter this.Children.Add
+    open System.Collections.Generic
+    type IList<'T> with
+        member this.AddRange([<ParamArray>] items) = 
+            items |> Array.iter this.Add
 
 [<AbstractClass>]
 type View<'Event, 'Model, 'Root when 'Root :> Element>(root: 'Root) = 

@@ -1,5 +1,6 @@
 ﻿namespace Todo
 
+open System.Collections.Generic
 open Xamarin.Forms
 open Tamarin
 
@@ -24,8 +25,7 @@ type TodoItemPage() as this =
 
         this.Content <- 
             let layout = StackLayout(VerticalOptions = LayoutOptions.StartAndExpand, Padding = Thickness 20.)
-            
-            layout.AddChildren(
+            layout.Children.AddRange(
                 nameLabel, nameEntry, 
                 notesLabel, notesEntry,
                 doneLabel, doneEntry,
@@ -34,3 +34,21 @@ type TodoItemPage() as this =
             )
 
             layout
+
+type TodoItemModel() =
+    inherit Model() 
+
+    let mutable items = Array.empty<TodoItem>
+    let mutable selectedTask = Unchecked.defaultof<TodoItem>
+
+    member this.Items 
+        with get() = items
+        and set value = 
+            items <- value
+            this.NotifyPropertyChanged <@ this.Items @>
+
+    member this.SelectedTask 
+        with get() = selectedTask
+        and set value = 
+            selectedTask <- value
+            this.NotifyPropertyChanged <@ this.SelectedTask @>

@@ -1,6 +1,7 @@
 ﻿namespace Todo
 
 open System
+open System.IO
 open MonoTouch.UIKit
 open MonoTouch.Foundation
 open Xamarin.Forms
@@ -14,19 +15,32 @@ type AppDelegate () =
     let mutable window: UIWindow = null
     let mutable eventLoop: IDisposable = null
 
+    let conn = 
+        let sqliteFilename = "TodoSQLite.db3";
+        let documentsPath = Environment.GetFolderPath (Environment.SpecialFolder.Personal); // Documents folder
+        let libraryPath = Path.Combine (documentsPath, "..", "Library"); // Library folder
+        let path = Path.Combine(libraryPath, sqliteFilename);
+
+        // This is where we copy in the prepopulated database
+        if not <| File.Exists path 
+        then 
+            File.Copy (sqliteFilename, path)
+
+        let plat = new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS()
+        let conn = new SQLite.Net.SQLiteConnection(plat, path)
+
+        // Return the database connection 
+        conn
+
     override this.FinishedLaunching (app, options) =
         Forms.Init ()
         window <- new UIWindow (UIScreen.MainScreen.Bounds)
 
-//        let model = TipCalcModel(TipPercent = "15")
-//        let view = TipCalcView()
-//        let controller = TipCalcController()
-//        let mvc = Mvc(model, view, controller)
-//        eventLoop <- mvc.Start()
+        let model, view, controller = TodoListModel(), TodoListView(), TodoListController( conn)
+        let mvc = Mvc(model, view, controller)
+        eventLoop <- mvc.Start()
 
-        let page = NavigationPage ( TodoListPage())
-
-        window.RootViewController <- page.CreateViewController ()
+        window.RootViewController <- NavigationPage(view.Root).CreateViewController ()
         window.MakeKeyAndVisible ()
         true
 

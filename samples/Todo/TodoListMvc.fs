@@ -17,12 +17,15 @@ type TodoItemCell() as this =
             Orientation = StackOrientation.Horizontal,
             HorizontalOptions = LayoutOptions.StartAndExpand
         )
-    do
-        label.SetBinding (Label.TextProperty, "Name")
-        tick.SetBinding (Image.IsVisibleProperty, "Done")
+//    do
+//        label.SetBinding (Label.TextProperty, "Name")
+//        tick.SetBinding (Image.IsVisibleProperty, "Done")
     do
         layout.Children.AddRange( label, tick) 
         this.View <- layout
+
+    member __.Name = label
+    member __.Done = tick
 
 type TodoListPage() as this = 
     inherit ContentPage()
@@ -42,7 +45,6 @@ type TodoListPage() as this =
           TodoItem.Create( "Buy apples`", true)
           TodoItem.Create( "Buy bananas`", true)
         |]
-
         
         // HACK: workaround issue #894 for now
         if (Device.OS = TargetPlatform.iOS)
@@ -114,7 +116,12 @@ type TodoListModel() =
     override this.SetBindings model = 
         this.Root.TasksListView.SetBindings(
             itemsSource = <@ model.Items @>, 
-            selectedItem = <@ model.SelectedTask @>
+            selectedItem = <@ model.SelectedTask @>,
+            itemBindings = fun (dataTemplate: TodoItemCell) model ->
+                <@@
+                    dataTemplate.Name.Text <- model.Name
+                    dataTemplate.Done.IsVisible <- model.Done
+                @@>
         )
 
     override this.EventStreams = 

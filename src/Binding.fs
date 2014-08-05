@@ -148,13 +148,16 @@ type Binding with
                 target.SetBinding(targetProperty.BindableProperty, binding)
             | _ -> invalidArg "expr" (string e) 
 
+type ItemsView<'TVisual when 'TVisual :> BindableObject> with
+    member this.SetBindings(itemsSource : Expr<#seq<'Item>>, selectedItem : Expr<'Item>) = 
+        this.SetBinding( ListView.ItemsSourceProperty, (|Source|) itemsSource)
+        this.SetBinding( ListView.SelectedItemProperty, (|Source|) selectedItem)
+    
 type ListView with
-    member this.SetBindings(itemsSource : Expr<#seq<'Item>>, selectedItem : Expr<'Item>, itemBindings: ('DataTemplate -> 'Item -> Expr)) = 
-        this.SetBinding(ListView.ItemsSourceProperty, (|Source|) itemsSource)
-        this.SetBinding(ListView.SelectedItemProperty, (|Source|) selectedItem)
+    member this.SetBindings(itemsSource, selectedItem, itemBindings: ('DataTemplate -> 'Item -> Expr)) = 
+        this.SetBindings( itemsSource, selectedItem)
         this.ItemTemplate <- DataTemplate( fun() -> 
             let x = new 'DataTemplate()
-            let bindingExpr = itemBindings x Unchecked.defaultof<'Item>
-            Binding.OfExpression bindingExpr
+            Binding.OfExpression <| itemBindings x Unchecked.defaultof<'Item>
             box x
         )

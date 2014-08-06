@@ -18,7 +18,7 @@ module Extensions =
             items |> Array.iter this.Add
 
 [<AbstractClass>]
-type View<'Event, 'Model, 'Root when 'Root :> Element>(root: 'Root) = 
+type View<'Event, 'Model, 'Root when 'Root :> VisualElement>(root: 'Root) = 
 
     member this.Root = root
 
@@ -28,6 +28,8 @@ type View<'Event, 'Model, 'Root when 'Root :> Element>(root: 'Root) =
         member this.SetBindings model = 
             this.SetBindings model
             root.BindingContext <- model
+        member this.Navigation = 
+            root.Navigation
 
     abstract EventStreams : IObservable<'Event> list
     abstract SetBindings : 'Model -> unit

@@ -4,6 +4,7 @@ open System
 open System.IO
 open MonoTouch.UIKit
 open MonoTouch.Foundation
+open MonoTouch.AVFoundation
 open Xamarin.Forms
 
 open Tamarin
@@ -31,12 +32,29 @@ type AppDelegate () =
 
         // Return the database connection 
         conn
+    
+    let textToSpeechService = {
+        new ITextToSpeech with
+            member __.Speak text = 
+                use speechSynthesizer = new AVSpeechSynthesizer ()
+
+                let speechUtterance = 
+                    new AVSpeechUtterance(
+                        speechString = text,
+                        Rate = AVSpeechUtterance.MaximumSpeechRate/4.0f,
+                        Voice = AVSpeechSynthesisVoice.FromLanguage ("en-US"),
+                        Volume = 0.5f,
+                        PitchMultiplier = 1.0f
+                    )
+
+                speechSynthesizer.SpeakUtterance (speechUtterance);
+    }
 
     override this.FinishedLaunching (app, options) =
         Forms.Init ()
         window <- new UIWindow (UIScreen.MainScreen.Bounds)
 
-        let model, view, controller = TodoListModel(), TodoListView(), TodoListController( conn)
+        let model, view, controller = TodoListModel(), TodoListView(), TodoListController( conn, textToSpeechService)
         let mvc = Mvc(model, view, controller)
         eventLoop <- mvc.Start()
 

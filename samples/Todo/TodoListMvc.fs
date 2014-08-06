@@ -17,9 +17,7 @@ type TodoItemCell() as this =
             Orientation = StackOrientation.Horizontal,
             HorizontalOptions = LayoutOptions.StartAndExpand
         )
-//    do
-//        label.SetBinding (Label.TextProperty, "Name")
-//        tick.SetBinding (Image.IsVisibleProperty, "Done")
+
     do
         layout.Children.AddRange( label, tick) 
         this.View <- layout
@@ -38,14 +36,6 @@ type TodoListPage() as this =
 
         listView.ItemTemplate <- DataTemplate typeof<TodoItemCell>
 
-        listView.ItemsSource <- [|
-          TodoItem.Create "Buy pears`"
-          TodoItem.Create( "Buy oranges`", true)
-          TodoItem.Create( "Buy mangos`")
-          TodoItem.Create( "Buy apples`", true)
-          TodoItem.Create( "Buy bananas`", true)
-        |]
-        
         // HACK: workaround issue #894 for now
         if (Device.OS = TargetPlatform.iOS)
         then
@@ -126,7 +116,7 @@ type TodoListModel() =
 
     override this.EventStreams = 
         [
-            //yield this.Root.Appearing |> Observable.mapTo Refresh
+            yield this.Root.Appearing |> Observable.mapTo Refresh
             yield this.Root.TasksListView.ItemSelected |> Observable.mapTo ShowTaskDetails
             yield this.Root.PlusToolBarItem.Activated |> Observable.mapTo AddTask
             yield! 
@@ -136,27 +126,47 @@ type TodoListModel() =
                 |> Option.toList
         ]
 
-type TodoListController( conn) =
+type TodoListController( conn, textToSpeech) =
     inherit Controller<TodoListEvents, TodoListModel>()
 
     let database = Database( conn)
 
     override this.InitModel model = 
-        model.Items <- database.GetItems()
+        model.Items <- database.GetItems() |> Seq.toArray 
 
-    override this.Dispatcher = Sync << function
-        | Refresh -> this.InitModel
-        | ShowTaskDetails -> this.ShowTaskDetails 
-        | AddTask -> this.AddTask 
-        | ReadOutAllTasks -> this.ReadOutAllTasks 
+    override this.Dispatcher = function
+        | Refresh -> Sync this.InitModel
+        | ShowTaskDetails -> Async this.ShowTaskDetails 
+        | AddTask -> Async this.AddTask 
+        | ReadOutAllTasks -> Sync this.ReadOutAllTasks 
 
     member this.ShowTaskDetails model =
-        ()
+        async {
+            let view = TodoItemView()
+            let controller = TodoItemController( conn, textToSpeech)
+            let mvc = Mvc(model.SelectedTask, view, controller)
+            let eventLoop = mvc.Start()
+            do! this.Navigation.PushAsync(page = downcast view.Root) |> Async.AwaitIAsyncResult |> Async.Ignore
+        }
 
     member this.AddTask model =
-        ()
+        async {
+            let model = Activator.CreateInstance()
+            let view = TodoItemView()
+            let controller = TodoItemController( conn, textToSpeech)
+            let mvc = Mvc(model, view, controller)
+            let eventLoop = mvc.Start()
+            do! this.Navigation.PushAsync(page = downcast view.Root) |> Async.AwaitIAsyncResult |> Async.Ignore
+        }
 
     member this.ReadOutAllTasks model =
-        ()
+        query {
+            for task in database.GetItems() do
+            where (not task.Done)
+            select task.Name
+        }
+        |> fun xs -> Linq.Enumerable.DefaultIfEmpty( xs,  "there are no tasks to do")
+        |> String.concat " "
+        |> textToSpeech.Speak
     
     

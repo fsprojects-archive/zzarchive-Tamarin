@@ -151,9 +151,11 @@
     </Compile>
     <Compile Include="TodoListMvc.fs" />
     <Compile Include="AppDelegate.fs" />
+    <Compile Include="ITextToSpeech.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <Import Project="..\..\packages\Xamarin.Forms.1.2.2.6243\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10\Xamarin.Forms.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <XamarinComponentReference Include="sqlite-net">
       <Version>1.0.8</Version>

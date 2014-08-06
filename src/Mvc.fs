@@ -6,10 +6,12 @@ open System.Runtime.ExceptionServices
 open System.Reactive.Linq
 open System.Reactive.Concurrency
 open System.Threading
+open Xamarin.Forms
 
 type IView<'Event, 'Model> = 
     abstract Events : IObservable<'Event> with get
     abstract SetBindings : 'Model -> unit
+    abstract Navigation : INavigation
 
 type EventHandler<'Model> = 
     | Sync of ('Model -> unit)
@@ -18,9 +20,10 @@ type EventHandler<'Model> =
 type IController<'Event, 'Model> =
     abstract InitModel : 'Model -> unit
     abstract Dispatcher : ('Event -> EventHandler<'Model>)
+    abstract Navigation : INavigation with set
 
 [<Sealed>]
-type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, view : IView<'Event, 'Model>, controller : IController<'Event, 'Model>) =
+type Mvc<'Event, 'Model>(model : 'Model, view : IView<'Event, 'Model>, controller : IController<'Event, 'Model>) =
 
     let mutable error = fun(exn, _) -> ExceptionDispatchInfo.Capture(exn).Throw()
     
@@ -28,7 +31,8 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
 
         controller.InitModel model
         view.SetBindings model
-
+        controller.Navigation <- view.Navigation
+        
         let scheduler = SynchronizationContextScheduler(SynchronizationContext.Current, alwaysPost = false)
 
         view
@@ -56,6 +60,8 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
                 member __.SetBindings model =
                     view.SetBindings model  
                     model |> childModelSelector |> childView.SetBindings
+                member __.Navigation = 
+                    view.Navigation
         }
 
         let compositeController = { 
@@ -68,7 +74,9 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
                     | Choice2Of2 e -> 
                         match childController.Dispatcher e with
                         | Sync handler -> Sync(childModelSelector >> handler)  
-                        | Async handler -> Async(childModelSelector >> handler) 
+                        | Async handler -> Async(childModelSelector >> handler)
+                member __.Navigation 
+                    with set value = controller.Navigation <- value
         }
 
         Mvc(model, compositeView, compositeController)
@@ -81,6 +89,7 @@ type Mvc<'Event, 'Model when 'Model :> INotifyPropertyChanged>(model : 'Model, v
             new IView<_, _> with
                 member __.Events = events
                 member __.SetBindings _ = () 
+                member __.Navigation = raise <| NotImplementedException() 
         }
         this.Compose(childController, childView, id)
 

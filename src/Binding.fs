@@ -12,6 +12,8 @@ open Microsoft.FSharp.Quotations.ExprShape
 
 let inline private undefined<'T> = raise<'T> <| NotImplementedException()
 
+let coerce _ = undefined
+
 type IValueConverter with 
     static member Create(convert : 'a -> 'b, convertBack : 'b -> 'a) =  {
         new IValueConverter with
@@ -61,7 +63,7 @@ module internal Patterns =
         | _ -> None    
 
     let (|Converter|_|) = function
-        | Call(instance, method', [ propertyPath ]) -> 
+        | Call(instance, method', [ PropertyPath _ as propertyPath ]) -> 
             let instance = match instance with | Some( Value( value, _)) -> value | _ -> null
             Some((fun(value : obj) -> method'.Invoke(instance, [| value |])), propertyPath )
         | _ -> None    
@@ -93,7 +95,7 @@ module internal Patterns =
         }
 
     let (|SinglePropertyExpression|_|) expr = 
-        match expr |> extractPropertyGetters |> Seq.toList with
+        match expr |> extractPropertyGetters |> Seq.distinct |> Seq.toList with
         | [ SourceProperty prop as getterToReplace ] ->
             let propertyValue = Var("value", typeof<obj>)
             let rec replacePropertyWithParam expr = 
@@ -118,7 +120,8 @@ module internal Patterns =
             Binding() 
         | PropertyPath path -> 
             Binding(path) 
-        | Coerce( Source binding, _) ->
+        | Coerce( Source binding, _)
+        | SpecificCall <@ coerce @> (None, _, [ Source binding ]) ->  
             binding
         | StringFormat(format, Source binding) -> 
             binding.StringFormat <- format
@@ -150,13 +153,9 @@ type Binding with
                 target.SetBinding(targetProperty.BindableProperty, binding)
             | _ -> invalidArg "expr" (string e) 
 
-type ListView with
-    member this.SetBindings(itemsSource : Expr<#seq<'Item>>, selectedItem : Expr<'Item>) = 
-        this.SetBinding( ListView.ItemsSourceProperty, (|Source|) itemsSource)
-        this.SetBinding( ListView.SelectedItemProperty, (|Source|) selectedItem)
-
-    member this.SetBindings(itemsSource, itemBindings: ('DataTemplate -> 'Item -> Expr), ?selectedItem) = 
-        this.SetBinding( ListView.ItemsSourceProperty, (|Source|) itemsSource)
+type TabbedPage with
+    member this.SetBindings(itemsSource, itemBindings: ('DataTemplate -> 'Item -> Expr)) = 
+        this.SetBinding( TabbedPage.ItemsSourceProperty, (|Source|) itemsSource)
 
         this.ItemTemplate <- DataTemplate( fun() -> 
             let x = new 'DataTemplate()
@@ -164,6 +163,17 @@ type ListView with
             box x
         )
 
-        selectedItem |> Option.iter (fun x -> 
-            this.SetBinding( ListView.SelectedItemProperty, (|Source|) x)
+type ListView with
+    member this.SetBindings(itemsSource : Expr<#seq<'Item>>, selectedItem : Expr<'Item>) = 
+        this.SetBinding( ListView.ItemsSourceProperty, (|Source|) itemsSource)
+        this.SetBinding( ListView.SelectedItemProperty, (|Source|) selectedItem)
+
+    member this.SetBindings(itemsSource, selectedItem, itemBindings: ('DataTemplate -> 'Item -> Expr)) = 
+        this.SetBindings( itemsSource, selectedItem)
+        
+        this.ItemTemplate <- DataTemplate( fun() -> 
+            let x = new 'DataTemplate()
+            Binding.OfExpression <| itemBindings x Unchecked.defaultof<'Item>
+            box x
         )
+

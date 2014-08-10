@@ -48,34 +48,45 @@ type NonNullToBooleanConverter() =
             box( string value <> "")
         member __.ConvertBack (_, _, _, _) = null
 
+type TabbedPageItem() as this = 
+    inherit ContentPage()
+    do
+        this.LoadFromXamlResource "TabbedPageDemoPage.xaml"
+
+    member this.Name : Label = this ? Name
+    member this.Picture : Image = this ? Picture
+    member this.Family : Label = this ? Family
+    member this.SubfamilySection : StackLayout = this ? SubfamilySection
+    member this.Subfamily: Label = this ? Subfamily
+    member this.TribeSection : StackLayout = this ? TribeSection
+    member this.Tribe: Label = this ? Tribe
+    member this.Genus: Label = this ? Genus
+
+
 type TabbedPageDemoView() as this = 
     inherit View<unit, MonkeyDataModel[], TabbedPage>(root = TabbedPage())    
 
     do
-        this.Root.LoadFromXamlResource "TabbedPageDemoPage.xaml"
+        this.Root.ItemTemplate <- DataTemplate(typeof<TabbedPageItem>)
 
-//    let name : Label = this.Root ? Name
-//    let picture: Image = this.Root ? Picture
-//    let family: Label = this.Root ? Family
-//    let subfamilySection : StackLayout = this.Root ? SubfamilySection
-//    let subfamily: Label = this.Root ? Subfamily
-//    let tribeSection : StackLayout = this.Root ? TribeSection
-//    let tribe: Label = this.Root ? Tribe
-//    let genus: Label = this.Root ? Genus
-        
     override this.EventStreams = []
 
     override this.SetBindings model = 
         
-        Binding.OfExpression 
-            <@
-                this.Root.ItemsSource <- model
-            @>
-
-        this.Root.CurrentPageChanged.Add( fun args ->
-            let item = this.Root.ItemTemplate
-            //let name : Label = this.Root ? Name
-            ()
+        this.Root.SetBindings(
+            itemsSource = <@ model @>, 
+            itemBindings = fun (itemTemplate : TabbedPageItem) model ->
+                <@@
+                    itemTemplate.Title <- model.Name
+                    itemTemplate.Name.Text <- model.Name
+                    itemTemplate.Picture.Source <- coerce model.PhotoUrl
+                    itemTemplate.Family.Text <- model.Family
+                    itemTemplate.SubfamilySection.IsVisible <- model.Subfamily <> null && model.Subfamily <> ""
+                    itemTemplate.Subfamily.Text <- model.Subfamily
+                    itemTemplate.TribeSection.IsVisible <- not( String.IsNullOrEmpty( model.Tribe))
+                    itemTemplate.Tribe.Text <- model.Tribe
+                    itemTemplate.Genus.Text <- model.Genus
+                @@>
         )
-        
+             
     

@@ -107,10 +107,10 @@ type TodoListModel() =
         this.Root.TasksListView.SetBindings(
             itemsSource = <@ model.Items @>, 
             selectedItem = <@ model.SelectedTask @>,
-            itemBindings = fun (dataTemplate: TodoItemCell) model ->
+            itemBindings = fun (itemTemplate: TodoItemCell) model ->
                 <@@
-                    dataTemplate.Name.Text <- model.Name
-                    dataTemplate.Done.IsVisible <- model.Done
+                    itemTemplate.Name.Text <- model.Name
+                    itemTemplate.Done.IsVisible <- model.Done
                 @@>
         )
 

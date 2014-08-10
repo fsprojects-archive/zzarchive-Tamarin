@@ -18,9 +18,9 @@ type AppDelegate () =
         window <- new UIWindow (UIScreen.MainScreen.Bounds)
 
         let view = TabbedPageDemoView()
-//        view.Root.BindingContext <- MonkeyDataModel.All
-//        view.Root.SetBinding( TabbedPage.ItemsSourceProperty, Binding())
-        (view :> IView<_, _>).SetBindings( MonkeyDataModel.All)
+        let model = MonkeyDataModel.All
+        view.Root.BindingContext <- model
+        view.SetBindings model
         window.RootViewController <- view.Root.CreateViewController ()
         window.MakeKeyAndVisible ()
         true

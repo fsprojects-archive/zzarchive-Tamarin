@@ -23,8 +23,11 @@ type TipCalcModel() =
 type TipCalcEvents = Calculate
 
 type TipCalcView() as this = 
-    inherit View<TipCalcEvents, TipCalcModel, XamlPage>(root = XamlPage("TipCalcPage.xaml"))    
-    
+    inherit View<TipCalcEvents, TipCalcModel, ContentPage>(root = ContentPage())    
+
+    do
+        this.Root.LoadFromXamlResource "TipCalcPage.xaml"
+
     let subTotal: Entry = this.Root ? SubTotal
     let postTaxTotal: Entry = this.Root ? PostTaxTotal
     let tipPercent: Entry = this.Root ? TipPercent
@@ -51,7 +54,7 @@ type TipCalcView() as this =
                 total.Text <- String.Format("{0:C}", model.Total)
             @>
 
-        let converter = IValueConverter.Create(Decimal.Parse >> Decimal.ToDouble, fun x -> Decimal(x) |> Decimal.Round |> string)       
+        let converter = IValueConverter.Create(Double.Parse, Math.Round >> string)       
 
         Binding.OfExpression(
             <@ 

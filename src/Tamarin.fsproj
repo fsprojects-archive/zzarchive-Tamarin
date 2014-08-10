@@ -91,7 +91,7 @@
     <Compile Include="View.fs" />
     <Compile Include="Controller.fs" />
     <Compile Include="Binding.fs" />
-    <Compile Include="XamlPage.fs" />
+    <Compile Include="XamlExtensions.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

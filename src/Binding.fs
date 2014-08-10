@@ -16,10 +16,10 @@ type IValueConverter with
     static member Create(convert : 'a -> 'b, convertBack : 'b -> 'a) =  {
         new IValueConverter with
             member this.Convert(value, targetType, _, _) = 
-                assert (typeof<'a> = targetType)
+                assert (typeof<'b> = targetType)
                 value |> unbox |> convert |> box 
             member this.ConvertBack(value, targetType, _, _) = 
-                assert (typeof<'b> = targetType)
+                assert (typeof<'a> = targetType)
                 value |> unbox |> convertBack |> box 
     }
     static member OneWay convert = IValueConverter.Create(convert, fun _ -> undefined)
@@ -114,6 +114,8 @@ module internal Patterns =
         | _ -> None
 
     let rec (|Source|) = function
+        | PropertyPath "" -> 
+            Binding() 
         | PropertyPath path -> 
             Binding(path) 
         | Coerce( Source binding, _) ->
@@ -148,16 +150,20 @@ type Binding with
                 target.SetBinding(targetProperty.BindableProperty, binding)
             | _ -> invalidArg "expr" (string e) 
 
-type ItemsView<'TVisual when 'TVisual :> BindableObject> with
+type ListView with
     member this.SetBindings(itemsSource : Expr<#seq<'Item>>, selectedItem : Expr<'Item>) = 
         this.SetBinding( ListView.ItemsSourceProperty, (|Source|) itemsSource)
         this.SetBinding( ListView.SelectedItemProperty, (|Source|) selectedItem)
-    
-type ListView with
-    member this.SetBindings(itemsSource, selectedItem, itemBindings: ('DataTemplate -> 'Item -> Expr)) = 
-        this.SetBindings( itemsSource, selectedItem)
+
+    member this.SetBindings(itemsSource, itemBindings: ('DataTemplate -> 'Item -> Expr), ?selectedItem) = 
+        this.SetBinding( ListView.ItemsSourceProperty, (|Source|) itemsSource)
+
         this.ItemTemplate <- DataTemplate( fun() -> 
             let x = new 'DataTemplate()
             Binding.OfExpression <| itemBindings x Unchecked.defaultof<'Item>
             box x
+        )
+
+        selectedItem |> Option.iter (fun x -> 
+            this.SetBinding( ListView.SelectedItemProperty, (|Source|) x)
         )

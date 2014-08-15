@@ -163,9 +163,9 @@
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Tamarin.fsproj">
+    <ProjectReference Include="..\..\src\Tamarin.XS-Debug.fsproj">
       <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
-      <Name>Tamarin</Name>
+      <Name>Tamarin.XS-Debug</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

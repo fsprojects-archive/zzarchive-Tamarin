@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Tamarin.XS-Debug", "src\Tamarin.XS-Debug.fsproj", "{33D50D0D-839B-4377-9106-EF4A7F136073}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{DB8B3743-84BB-4C0F-A665-DEF7B73D282D}"
 EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "TipCalc", "samples\TipCalc\TipCalc.fsproj", "{6E5E9EA6-177A-4B21-9214-05F1A207D22F}"
@@ -12,6 +10,8 @@ EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Todo", "samples\Todo\Todo.fsproj", "{098F5E93-A260-4483-8E4B-572287B47A53}"
 EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "TabbedPageDemo", "samples\TabbedPageDemo\TabbedPageDemo.fsproj", "{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7}"
+EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Tamarin.Shared", "samples\Tamarin.Shared.fsproj", "{33D50D0D-839B-4377-9106-EF4A7F136073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +41,22 @@ Global
 		{098F5E93-A260-4483-8E4B-572287B47A53}.Release|iPhone.Build.0 = Release|iPhone
 		{098F5E93-A260-4483-8E4B-572287B47A53}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{098F5E93-A260-4483-8E4B-572287B47A53}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Release|iPhone.Build.0 = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{33D50D0D-839B-4377-9106-EF4A7F136073}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
 		{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
 		{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7}.AppStore|iPhone.ActiveCfg = AppStore|iPhone

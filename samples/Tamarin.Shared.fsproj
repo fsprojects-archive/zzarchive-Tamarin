@@ -84,25 +84,47 @@
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Mvc.fs" />
-    <Compile Include="Model.fs" />
-    <Compile Include="View.fs" />
-    <Compile Include="Controller.fs" />
-    <Compile Include="Binding.fs" />
-    <Compile Include="XamlExtensions.fs" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.2.2.6243\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10\Xamarin.Forms.targets" />
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="rxforxamarin">
       <Version>2.1</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\src\AssemblyInfo.fs">
+      <Link>AssemblyInfo.fs</Link>
+    </Compile>
+    <Compile Include="..\src\Mvc.fs">
+      <Link>Mvc.fs</Link>
+    </Compile>
+    <Compile Include="..\src\Model.fs">
+      <Link>Model.fs</Link>
+    </Compile>
+    <Compile Include="..\src\View.fs">
+      <Link>View.fs</Link>
+    </Compile>
+    <Compile Include="..\src\Controller.fs">
+      <Link>Controller.fs</Link>
+    </Compile>
+    <Compile Include="..\src\Binding.fs">
+      <Link>Binding.fs</Link>
+    </Compile>
+    <Compile Include="..\src\XamlExtensions.fs">
+      <Link>XamlExtensions.fs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\src\View.fs">
+      <Link>Resources\View.fs</Link>
+    </BundleResource>
+    <BundleResource Include="..\src\XamlExtensions.fs">
+      <Link>Resources\XamlExtensions.fs</Link>
+    </BundleResource>
   </ItemGroup>
 </Project>

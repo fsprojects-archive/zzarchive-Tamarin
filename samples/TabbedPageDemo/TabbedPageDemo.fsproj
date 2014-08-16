@@ -161,9 +161,9 @@
     <BundleResource Include="Resources\TabbedPageDemoPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Tamarin.XS-Debug.fsproj">
+    <ProjectReference Include="..\Tamarin.Shared.fsproj">
       <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
-      <Name>Tamarin.XS-Debug</Name>
+      <Name>Tamarin.Shared</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

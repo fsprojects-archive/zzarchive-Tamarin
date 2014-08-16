@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Tamarin</id>
+    <version>0.1.0-aplha</version>
+    <authors>Dmitry Morozov</authors>
+    <owners>Dmitry Morozov</owners>
+    <licenseUrl>http://github.com/fsprojects/Tamarin/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>http://github.com/fsprojects/Tamarin/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>F# MVC for Xamarin.Forms</description>
+    <summary>Functional-first F# GUI framework for Xamarin.Forms.</summary>
+    <releaseNotes>Initial push.</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>F# Xamarin mobile</tags>
+  </metadata>
+  <files>
+    <file src="bin\Debug\Tamarin.dll" target="lib/portable-win+net45+wp80+MonoAndroid10+MonoTouch10" />
+    <file src="bin\Debug\Tamarin.pdb" target="lib/portable-win+net45+wp80+MonoAndroid10+MonoTouch10" />
+  </files>
+</package>

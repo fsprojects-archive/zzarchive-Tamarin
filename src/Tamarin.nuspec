@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Tamarin</id>
-    <version>0.1.0-aplha</version>
+    <version>0.2.0-aplha</version>
     <authors>Dmitry Morozov</authors>
     <owners>Dmitry Morozov</owners>
     <licenseUrl>http://github.com/fsprojects/Tamarin/blob/master/LICENSE.md</licenseUrl>
@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>F# MVC for Xamarin.Forms</description>
     <summary>Functional-first F# GUI framework for Xamarin.Forms.</summary>
-    <releaseNotes>Initial push.</releaseNotes>
+    <releaseNotes>Implicit one-way converters fixed.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>F# Xamarin mobile</tags>
   </metadata>

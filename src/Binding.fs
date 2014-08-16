@@ -24,7 +24,6 @@ type IValueConverter with
                 assert (typeof<'a> = targetType)
                 value |> unbox |> convertBack |> box 
     }
-    static member OneWay convert = IValueConverter.Create(convert, fun _ -> undefined)
 
     member this.Apply<'Source, 'Target>(sourceProperty : 'Source) : 'Target = undefined
 
@@ -98,6 +97,13 @@ module internal Patterns =
             | ShapeCombination( _, exprs) -> for subExpr in exprs do yield! extractPropertyGetters subExpr
         }
 
+    type IValueConverter with 
+        static member OneWay converter = {
+                new IValueConverter with
+                    member this.Convert(value, _, _, _) = converter value
+                    member this.ConvertBack(_, _, _, _) = undefined
+            }
+
     let (|SinglePropertyExpression|_|) expr = 
         match expr |> extractPropertyGetters |> Seq.distinct |> Seq.toList with
         | [ SourceProperty prop as getterToReplace ] ->
@@ -116,7 +122,13 @@ module internal Patterns =
                 |> Microsoft.FSharp.Linq.RuntimeHelpers.LeafExpressionConverter.EvaluateQuotation 
                 |> unbox
 
-            Some( Binding(prop.Name, BindingMode.OneWay, converter = IValueConverter.OneWay converter))
+            let binding = Binding(prop.Name, BindingMode.OneWay)
+            binding.Converter <- {
+                new IValueConverter with
+                    member this.Convert(value, _, _, _) = converter value
+                    member this.ConvertBack(_, _, _, _) = undefined
+            }
+            Some binding
         | _ -> None
 
     let rec (|Source|) = function
@@ -133,9 +145,13 @@ module internal Patterns =
         | Call(None, ``method``, [ Value(:? IValueConverter as converter, _); Source binding ] ) when ``method``.Name = "IValueConverter.Apply" -> 
             binding.Converter <- converter
             binding
-        | Converter(convert, Source binding) -> 
+        | Converter(converter, Source binding) -> 
             binding.Mode <- BindingMode.OneWay
-            binding.Converter <- IValueConverter.OneWay convert
+            binding.Converter <- {
+                new IValueConverter with
+                    member __.Convert(value, _, _, _) = converter value
+                    member __.ConvertBack(_, _, _, _) = undefined
+            }
             binding
         | SinglePropertyExpression binding -> 
             binding

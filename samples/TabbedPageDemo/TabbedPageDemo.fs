@@ -42,12 +42,6 @@ type MonkeyDataModel = {
 
 open Tamarin
 
-type NonNullToBooleanConverter() = 
-    interface IValueConverter with
-        member __.Convert( value, _, _, _) =
-            box( string value <> "")
-        member __.ConvertBack (_, _, _, _) = null
-
 type TabbedPageItem() as this = 
     inherit ContentPage()
     do

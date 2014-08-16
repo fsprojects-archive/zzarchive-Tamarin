@@ -11,6 +11,8 @@ Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Todo", "samples\Todo\Todo.f
 EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "TabbedPageDemo", "samples\TabbedPageDemo\TabbedPageDemo.fsproj", "{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7}"
 EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Hanselman", "samples\Hanselman\Hanselman.fsproj", "{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}"
+EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Tamarin.Shared", "samples\Tamarin.Shared.fsproj", "{33D50D0D-839B-4377-9106-EF4A7F136073}"
 EndProject
 Global
@@ -89,6 +91,22 @@ Global
 		{6E5E9EA6-177A-4B21-9214-05F1A207D22F}.Release|iPhone.Build.0 = Release|iPhone
 		{6E5E9EA6-177A-4B21-9214-05F1A207D22F}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{6E5E9EA6-177A-4B21-9214-05F1A207D22F}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Debug|iPhone.Build.0 = Debug|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Release|iPhone.ActiveCfg = Release|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Release|iPhone.Build.0 = Release|iPhone
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{58DF417F-B9DD-4395-94E3-A225DDA75E1D}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
 		{58DF417F-B9DD-4395-94E3-A225DDA75E1D}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
 		{58DF417F-B9DD-4395-94E3-A225DDA75E1D}.AppStore|iPhone.ActiveCfg = Release|Any CPU
@@ -110,9 +128,10 @@ Global
 		{6E5E9EA6-177A-4B21-9214-05F1A207D22F} = {DB8B3743-84BB-4C0F-A665-DEF7B73D282D}
 		{098F5E93-A260-4483-8E4B-572287B47A53} = {DB8B3743-84BB-4C0F-A665-DEF7B73D282D}
 		{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7} = {DB8B3743-84BB-4C0F-A665-DEF7B73D282D}
+		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE} = {DB8B3743-84BB-4C0F-A665-DEF7B73D282D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = samples\TabbedPageDemo\TabbedPageDemo.fsproj
+		StartupItem = samples\Hanselman\Hanselman.fsproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

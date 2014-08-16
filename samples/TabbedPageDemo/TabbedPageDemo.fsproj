@@ -162,11 +162,11 @@
     <BundleResource Include="Resources\Icon%402x.png" />
   </ItemGroup>
   <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Tamarin.Shared.fsproj">
       <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
       <Name>Tamarin.Shared</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
 </Project>

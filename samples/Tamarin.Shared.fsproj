@@ -119,12 +119,4 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="..\src\View.fs">
-      <Link>Resources\View.fs</Link>
-    </BundleResource>
-    <BundleResource Include="..\src\XamlExtensions.fs">
-      <Link>Resources\XamlExtensions.fs</Link>
-    </BundleResource>
-  </ItemGroup>
 </Project>

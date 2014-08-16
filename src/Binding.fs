@@ -82,7 +82,7 @@ module internal Patterns =
 
     type PropertyInfo with
         member internal this.IsNullableValue =  
-            this.DeclaringType.IsGenericType && this.DeclaringType.GetGenericTypeDefinition() = typedefof<Nullable<_>> && this.Name = "Value"
+            this.DeclaringType.GetTypeInfo().IsGenericType && this.DeclaringType.GetGenericTypeDefinition() = typedefof<Nullable<_>> && this.Name = "Value"
 
     let rec (|SourceProperty|_|) = function 
         | PropertyGet( Some _, prop, []) -> Some prop 

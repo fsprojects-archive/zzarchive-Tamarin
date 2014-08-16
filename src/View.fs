@@ -12,10 +12,16 @@ module Observable =
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Extensions = 
+
     open System.Collections.Generic
     type IList<'T> with
         member this.AddRange([<ParamArray>] items) = 
             items |> Array.iter this.Add
+           
+    let (?) (this : #VisualElement) name = 
+        match this.FindByName name with
+        | null -> invalidArg "Name" ("Cannot find element with name: " + name)
+        | control -> unbox control 
 
 [<AbstractClass>]
 type View<'Event, 'Model, 'Root when 'Root :> VisualElement>(root: 'Root) = 

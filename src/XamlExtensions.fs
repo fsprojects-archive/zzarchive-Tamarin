@@ -3,22 +3,16 @@ module Tamarin.XamlExtensions
 
 open System.Reflection
 open System.IO
-
-open MonoTouch.Foundation
 open Xamarin.Forms
 
-let internal loadFromXaml = typeof<Xaml.Extensions>.GetMethod("LoadFromXaml", BindingFlags.NonPublic ||| BindingFlags.Static)
+let internal loadFromXaml = 
+    typeof<Xaml.Extensions>.GetRuntimeMethods() |> Seq.find (fun x -> x.Name = "LoadFromXaml" && not x.IsPublic)
 
 type VisualElement with
-    member this.LoadFromXamlResource(bundledResourse : string) =
-        let file = Path.Combine(NSBundle.MainBundle.BundlePath, bundledResourse)
-        assert (File.Exists file)
-        let xaml = File.ReadAllText file
+    member this.LoadFromXamlResource(embeddedResourse : string) =
+        use stream = Assembly.GetCallingAssembly().GetManifestResourceStream( embeddedResourse)
+        use reader = new StreamReader( stream)
+        let xaml = reader.ReadToEnd()
         loadFromXaml.MakeGenericMethod(this.GetType()).Invoke(null, [| this; xaml |]) |> ignore
            
-let (?) (this : #VisualElement) name = 
-    match this.FindByName name with
-    | null -> invalidArg "Name" ("Cannot find element with name: " + name)
-    | control -> unbox control 
-
-     
+  

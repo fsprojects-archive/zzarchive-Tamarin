@@ -135,6 +135,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="TabbedPageDemoPage.xaml">
+    </EmbeddedResource>
     <Compile Include="TabbedPageDemo.fs" />
     <Compile Include="AppDelegate.fs" />
   </ItemGroup>
@@ -158,12 +160,13 @@
     <BundleResource Include="Resources\Icon-Small%402x.png" />
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\Icon%402x.png" />
-    <BundleResource Include="Resources\TabbedPageDemoPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tamarin.Shared.fsproj">
       <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
       <Name>Tamarin.Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
   </ItemGroup>
 </Project>

@@ -135,6 +135,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="TipCalcPage.xaml">
+    </EmbeddedResource>
     <Compile Include="TipCalcMvc.fs" />
     <Compile Include="AppDelegate.fs" />
   </ItemGroup>
@@ -146,12 +148,11 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\TipCalcPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Tamarin.Shared.fsproj">
       <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
       <Name>Tamarin.Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
   </ItemGroup>
 </Project>

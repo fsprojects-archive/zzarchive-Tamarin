@@ -112,7 +112,7 @@ Global
 		{4C62AA7A-404F-47BA-A25B-308E1F4D4FC7} = {DB8B3743-84BB-4C0F-A665-DEF7B73D282D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = samples\TabbedPageDemo\TabbedPageDemo.fsproj
+		StartupItem = samples\TipCalc\TipCalc.fsproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

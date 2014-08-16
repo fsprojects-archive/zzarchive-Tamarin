@@ -33,7 +33,7 @@ module internal Patterns =
     type PropertyInfo with
         member this.BindableProperty = 
             this.DeclaringType
-                .GetField(this.Name + "Property", BindingFlags.Static ||| BindingFlags.Public)
+                .GetRuntimeField( this.Name + "Property")
                 .GetValue(null, [||]) 
                 |> unbox<BindableProperty> 
 
@@ -68,13 +68,17 @@ module internal Patterns =
             Some((fun(value : obj) -> method'.Invoke(instance, [| value |])), propertyPath )
         | _ -> None    
          
+    let private fshaprCoreModule = Type.GetType("Microsoft.FSharp.Core.Operators, FSharp.Core")
+
     let private getUnboxImpl = 
-        let ref = Type.GetType("Microsoft.FSharp.Core.Operators, FSharp.Core").GetMethod("Unbox")
-        fun t -> ref.MakeGenericMethod [| t |]
+        let ref = fshaprCoreModule.GetRuntimeMethod("Unbox", [| typeof<obj> |])
+        fun t -> 
+            ref.MakeGenericMethod [| t |]
 
     let private getBoxImpl = 
-        let ref = Type.GetType("Microsoft.FSharp.Core.Operators, FSharp.Core").GetMethod("Box")
-        fun t -> ref.MakeGenericMethod [| t |]
+        let ref = fshaprCoreModule.GetRuntimeMethods() |> Seq.find (fun x -> x.Name = "Box")
+        fun t -> 
+            ref.MakeGenericMethod [| t |]
 
     type PropertyInfo with
         member internal this.IsNullableValue =  

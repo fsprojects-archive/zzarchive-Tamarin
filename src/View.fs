@@ -24,7 +24,7 @@ module Extensions =
         | control -> unbox control 
 
 [<AbstractClass>]
-type View<'Event, 'Model, 'Root when 'Root :> VisualElement>(root: 'Root) = 
+type View<'Event, 'Model, 'Root when 'Root :> VisualElement>(root : 'Root) = 
 
     member this.Root = root
 
@@ -39,3 +39,9 @@ type View<'Event, 'Model, 'Root when 'Root :> VisualElement>(root: 'Root) =
 
     abstract EventStreams : IObservable<'Event> list
     abstract SetBindings : 'Model -> unit
+
+[<AbstractClass>]
+type StaticView<'Model, 'Root when 'Root :> VisualElement>(root) = 
+    inherit View<unit, 'Model, 'Root>(root)
+
+    override __.EventStreams = []

@@ -58,12 +58,10 @@ type TabbedPageItem() as this =
 
 
 type TabbedPageDemoView() as this = 
-    inherit View<unit, MonkeyDataModel[], TabbedPage>(root = TabbedPage())    
+    inherit StaticView<MonkeyDataModel[], TabbedPage>(root = TabbedPage())    
 
     do
         this.Root.ItemTemplate <- DataTemplate(typeof<TabbedPageItem>)
-
-    override this.EventStreams = []
 
     override this.SetBindings model = 
         

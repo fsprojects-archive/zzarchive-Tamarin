@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -99,8 +99,6 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core" />
     <Reference Include="monotouch" />
     <Reference Include="System.Runtime">
       <HintPath>..\..\..\..\..\..\Developer\MonoTouch\usr\lib\mono\2.1\Facades\System.Runtime.dll</HintPath>
@@ -134,6 +132,7 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
+    <Compile Include="HomeMvc.fs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.fs" />
@@ -146,5 +145,27 @@
       <Project>{33D50D0D-839B-4377-9106-EF4A7F136073}</Project>
       <Name>Tamarin.Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\about.png" />
+    <BundleResource Include="Resources\about%402x.png" />
+    <BundleResource Include="Resources\blog.png" />
+    <BundleResource Include="Resources\blog%402x.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
+    <BundleResource Include="Resources\facebook.png" />
+    <BundleResource Include="Resources\facebook%402x.png" />
+    <BundleResource Include="Resources\googleplus.png" />
+    <BundleResource Include="Resources\googleplus%402x.png" />
+    <BundleResource Include="Resources\instagram.png" />
+    <BundleResource Include="Resources\instagram%402x.png" />
+    <BundleResource Include="Resources\refresh.png" />
+    <BundleResource Include="Resources\refresh%402x.png" />
+    <BundleResource Include="Resources\scott.png" />
+    <BundleResource Include="Resources\slideout.png" />
+    <BundleResource Include="Resources\slideout%402x.png" />
+    <BundleResource Include="Resources\twitter.png" />
+    <BundleResource Include="Resources\twitter%402x.png" />
+    <BundleResource Include="Resources\twitternav.png" />
+    <BundleResource Include="Resources\twitternav%402x.png" />
   </ItemGroup>
 </Project>

@@ -14,16 +14,13 @@ type AppDelegate () =
     let mutable window: UIWindow = null
 
     override this.FinishedLaunching (app, options) =
-        Forms.Init ()
         window <- new UIWindow (UIScreen.MainScreen.Bounds)
-
-//        let view = TabbedPageDemoView()
-//        let model = MonkeyDataModel.All
-//        view.Root.BindingContext <- model
-//        view.SetBindings model
-
-        let view = ContentPage()
-        window.RootViewController <- view.CreateViewController ()
+        UINavigationBar.Appearance.SetTitleTextAttributes( UITextAttributes( TextColor = UIColor.White))
+    
+        Forms.Init ()
+        
+        let view = HomeMasterView()
+        window.RootViewController <- view.Root.CreateViewController ()
         window.MakeKeyAndVisible ()
         true
 

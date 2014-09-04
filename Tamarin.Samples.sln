@@ -131,7 +131,7 @@ Global
 		{775EAEDA-8165-407A-B150-A1BF6A7C5ECE} = {DB8B3743-84BB-4C0F-A665-DEF7B73D282D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = samples\Hanselman\Hanselman.fsproj
+		StartupItem = samples\TipCalc\TipCalc.fsproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

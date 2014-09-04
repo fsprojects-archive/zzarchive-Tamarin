@@ -32,8 +32,8 @@ type View<'Event, 'Model, 'Root when 'Root :> VisualElement>(root : 'Root) =
         member this.Events = 
             this.EventStreams.Merge() 
         member this.SetBindings model = 
-            this.SetBindings model
             root.BindingContext <- model
+            this.SetBindings model
         member this.Navigation = 
             root.Navigation
 

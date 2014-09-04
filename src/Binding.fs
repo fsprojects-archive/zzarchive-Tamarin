@@ -12,6 +12,7 @@ open Microsoft.FSharp.Quotations.ExprShape
 
 let inline private undefined<'T> = raise<'T> <| NotImplementedException()
 
+//Xamarin.Forms default conversion. 
 let coerce _ = undefined
 
 type IValueConverter with 
@@ -69,11 +70,6 @@ module internal Patterns =
          
     let private fshaprCoreModule = Type.GetType("Microsoft.FSharp.Core.Operators, FSharp.Core")
 
-    let private getUnboxImpl = 
-        let ref = fshaprCoreModule.GetRuntimeMethod("Unbox", [| typeof<obj> |])
-        fun t -> 
-            ref.MakeGenericMethod [| t |]
-
     let private getBoxImpl = 
         let ref = fshaprCoreModule.GetRuntimeMethods() |> Seq.find (fun x -> x.Name = "Box")
         fun t -> 
@@ -99,10 +95,10 @@ module internal Patterns =
 
     type IValueConverter with 
         static member OneWay converter = {
-                new IValueConverter with
-                    member this.Convert(value, _, _, _) = converter value
-                    member this.ConvertBack(_, _, _, _) = undefined
-            }
+            new IValueConverter with
+                member this.Convert(value, _, _, _) = converter value
+                member this.ConvertBack(_, _, _, _) = undefined
+        }
 
     let (|SinglePropertyExpression|_|) expr = 
         match expr |> extractPropertyGetters |> Seq.distinct |> Seq.toList with
@@ -111,7 +107,8 @@ module internal Patterns =
             let rec replacePropertyWithParam expr = 
                 match expr with 
                 | PropertyGet _ as getter when getter = getterToReplace -> 
-                    Expr.Call( getUnboxImpl prop.PropertyType, [ Expr.Var propertyValue ])
+                    Expr.Coerce( Expr.Var propertyValue, prop.PropertyType)
+                    //Expr.Call( getUnboxImpl prop.PropertyType, [ Expr.Var propertyValue ])
                 | ShapeVar var -> Expr.Var( var)
                 | ShapeLambda( var, body) -> Expr.Lambda(var, replacePropertyWithParam body)  
                 | ShapeCombination( shape, exprs) -> ExprShape.RebuildShapeCombination( shape, exprs |> List.map( fun e -> replacePropertyWithParam e))
@@ -119,6 +116,7 @@ module internal Patterns =
             let converterBody = Expr.Call(getBoxImpl expr.Type, [ replacePropertyWithParam expr ])
             let converter: obj -> obj = 
                 Expr.Lambda(propertyValue, converterBody)
+                //Expr.Lambda(propertyValue, Expr.Coerce( replacePropertyWithParam expr, typeof<obj>))
                 |> Microsoft.FSharp.Linq.RuntimeHelpers.LeafExpressionConverter.EvaluateQuotation 
                 |> unbox
 
@@ -173,6 +171,7 @@ type Binding with
                 target.SetBinding(targetProperty.BindableProperty, binding)
             | _ -> invalidArg "expr" (string e) 
 
+//Control specific extensions
 type TabbedPage with
     member this.SetBindings(itemsSource, itemBindings: ('DataTemplate -> 'Item -> Expr)) = 
         this.SetBinding( TabbedPage.ItemsSourceProperty, (|Source|) itemsSource)

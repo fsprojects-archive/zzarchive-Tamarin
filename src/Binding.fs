@@ -68,12 +68,7 @@ module internal Patterns =
             Some((fun(value : obj) -> method'.Invoke(instance, [| value |])), propertyPath )
         | _ -> None    
          
-    let private fshaprCoreModule = Type.GetType("Microsoft.FSharp.Core.Operators, FSharp.Core")
-
-    let private getBoxImpl = 
-        let ref = fshaprCoreModule.GetRuntimeMethods() |> Seq.find (fun x -> x.Name = "Box")
-        fun t -> 
-            ref.MakeGenericMethod [| t |]
+    let changeTypeHandle = typeof<Convert>.GetRuntimeMethod( "ChangeType", [| typeof<obj>; typeof<Type> |])
 
     type PropertyInfo with
         member internal this.IsNullableValue =  
@@ -108,15 +103,14 @@ module internal Patterns =
                 match expr with 
                 | PropertyGet _ as getter when getter = getterToReplace -> 
                     Expr.Coerce( Expr.Var propertyValue, prop.PropertyType)
-                    //Expr.Call( getUnboxImpl prop.PropertyType, [ Expr.Var propertyValue ])
                 | ShapeVar var -> Expr.Var( var)
                 | ShapeLambda( var, body) -> Expr.Lambda(var, replacePropertyWithParam body)  
                 | ShapeCombination( shape, exprs) -> ExprShape.RebuildShapeCombination( shape, exprs |> List.map( fun e -> replacePropertyWithParam e))
-
-            let converterBody = Expr.Call(getBoxImpl expr.Type, [ replacePropertyWithParam expr ])
+            
+            let body = Expr.Call(changeTypeHandle, [ replacePropertyWithParam expr; Expr.Value(typeof<obj>) ])
+            //let body = Expr.Coerce(replacePropertyWithParam expr, typeof<obj>) 
             let converter: obj -> obj = 
-                Expr.Lambda(propertyValue, converterBody)
-                //Expr.Lambda(propertyValue, Expr.Coerce( replacePropertyWithParam expr, typeof<obj>))
+                Expr.Lambda( propertyValue, body) 
                 |> Microsoft.FSharp.Linq.RuntimeHelpers.LeafExpressionConverter.EvaluateQuotation 
                 |> unbox
 

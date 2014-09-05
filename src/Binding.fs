@@ -68,8 +68,6 @@ module internal Patterns =
             Some((fun(value : obj) -> method'.Invoke(instance, [| value |])), propertyPath )
         | _ -> None    
          
-    let changeTypeHandle = typeof<Convert>.GetRuntimeMethod( "ChangeType", [| typeof<obj>; typeof<Type> |])
-
     type PropertyInfo with
         member internal this.IsNullableValue =  
             this.DeclaringType.GetTypeInfo().IsGenericType && this.DeclaringType.GetGenericTypeDefinition() = typedefof<Nullable<_>> && this.Name = "Value"
@@ -94,6 +92,8 @@ module internal Patterns =
                 member this.Convert(value, _, _, _) = converter value
                 member this.ConvertBack(_, _, _, _) = undefined
         }
+
+    let private changeTypeHandle = typeof<Convert>.GetRuntimeMethod( "ChangeType", [| typeof<obj>; typeof<Type> |])
 
     let (|SinglePropertyExpression|_|) expr = 
         match expr |> extractPropertyGetters |> Seq.distinct |> Seq.toList with

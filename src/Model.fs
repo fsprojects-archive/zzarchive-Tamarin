@@ -18,4 +18,4 @@ type Model() =
         match propertySelector with 
         | PropertyGet(Some (Value (instance, _)), property, _) when Object.ReferenceEquals(instance, this) -> 
             this.NotifyPropertyChanged property.Name
-        | _ -> invalidOp "Expecting property getter expression only like `this.SomeProperty`."
+        | _ -> invalidOp "Expecting property getter expression only (for example `this.SomeProperty`)."

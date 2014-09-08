@@ -2,6 +2,7 @@
 
 open System
 open Xamarin.Forms
+open PropertyChanged
 
 open Tamarin
 
@@ -20,6 +21,14 @@ type TipCalcModel() =
     member this.TipAmount with get() = tipAmount and set value = tipAmount <- value; this.NotifyPropertyChanged <@ this.TipAmount @>
     member this.Total with get() = total and set value = total <- value; this.NotifyPropertyChanged <@ this.Total @>
 
+[<ImplementPropertyChanged>]
+type TipCalcModel1() = 
+    member val SubTotal = "" with get, set
+    member val PostTaxTotal = "" with get, set
+    member val TipPercent = "" with get, set
+    member val TipAmount = Nullable<decimal>() with get, set
+    member val Total = Nullable<decimal>() with get, set
+
 type TipCalcEvents = Calculate
 
 type TipCalcView() as this = 
@@ -37,7 +46,9 @@ type TipCalcView() as this =
         
     override this.EventStreams = 
         [
-            subTotal.TextChanged |> Observable.mapTo Calculate
+            subTotal.TextChanged |> Observable.map (fun args -> 
+                Calculate)
+            //subTotal.TextChanged |> Observable.mapTo Calculate
             postTaxTotal.TextChanged |> Observable.mapTo Calculate
             tipPercent.TextChanged |> Observable.mapTo Calculate
         ] 

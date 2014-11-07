@@ -32,10 +32,7 @@ module internal Patterns =
 
     type PropertyInfo with
         member this.BindableProperty = 
-            this.DeclaringType
-                .GetRuntimeField( this.Name + "Property")
-                .GetValue(null, [||]) 
-                |> unbox<BindableProperty> 
+            this.DeclaringType.GetRuntimeField( this.Name + "Property").GetValue(null) |> unbox<BindableProperty> 
 
     let (|Target|_|) expr = 
         let rec loop = function

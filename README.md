@@ -2,3 +2,12 @@ Tamarin
 =======
 
 F# MVC framework for Xamarin.Forms
+
+## Maintainer(s)
+
+- [@dmitry-a-morozov](https://github.com/dmitry-a-morozov)
+- [@dsevastianov](https://github.com/dsevastianov)
+- [@orlandpm](https://github.com/orlandpm)
+- [@soloveichik](https://github.com/soloveichik)
+
+The default maintainer account for projects under "fsprojects" is [@fsgit](https://github.com/fsgit) - F# Community Project Incubation Space (repo management)

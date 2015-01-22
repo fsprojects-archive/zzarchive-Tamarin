@@ -1,4 +1,7 @@
-Tamarin
+[![Issue Stats](http://issuestats.com/github/fsprojects/Tamarin/badge/issue)](http://issuestats.com/github/fsprojects/Tamarin)
+[![Issue Stats](http://issuestats.com/github/fsprojects/Tamarin/badge/pr)](http://issuestats.com/github/fsprojects/Tamarin)
+
+Tamarin [![NuGet Status](http://img.shields.io/nuget/v/Tamarin.svg?style=flat)](https://www.nuget.org/packages/Tamarin/)
 =======
 
 F# MVC framework for Xamarin.Forms
